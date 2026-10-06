@@ -152,8 +152,8 @@ footer p{color:var(--text-3);max-width:70ch}
       <h2>What you need</h2>
       <p>All of it free, none of it tied to an account.</p>
       <ul>
-        <li>A local Warcraft install. Any current Classic client on your disk works, because the viewer reads that install's own data files. The game does not need to be running or even updated to the newest patch.</li>
-        <li><strong>wow.export</strong>, the export toolkit by Kruithne. This is the app that contains the built-in 3D world viewer. It is a portable download, so there is no installer and no sign-in.</li>
+        <li><strong>A Warcraft install, or just an internet connection.</strong> Point it at a client on your disk and it reads that install's own data files offline, including older legacy installs. With no client on the machine it can stream the same data from public CDN hosts instead. Neither path involves a login, and the game never needs to be running or patched.</li>
+        <li><strong>wow.export</strong>, the export toolkit by Kruithne. This is the app that contains the built-in 3D world viewer. No build of it ever asks you to sign in.</li>
         <li>Roughly 4 GB of free memory for continent-scale views, more if you load several zones at once.</li>
         <li>Optional: a screen recorder such as OBS Studio if you want moving footage rather than stills.</li>
       </ul>
@@ -161,25 +161,39 @@ footer p{color:var(--text-3);max-width:70ch}
 
     <section id="install">
       <h2>Set it up</h2>
+      <p class="lede">Six steps from download to a loaded zone. None of them need an account, a sign-in, or a running game.</p>
       <ol class="steps">
         <li>
-          <h3>Download the viewer</h3>
-          <p>Get wow.export from its official page at <a href="https://www.kruithne.net/wow.export/">kruithne.net/wow.export</a>, choosing the portable build for Windows or the macOS package. There is a build for each platform, so pick the one matching your machine. Nothing is installed into the game folder and no account is requested at any point.</p>
+          <h3>Download the build for your machine</h3>
+          <p>Get wow.export from its official page at <a href="https://www.kruithne.net/wow.export/">kruithne.net/wow.export</a>. There are builds for Windows, Linux, macOS on Apple Silicon, and macOS on Intel, and each has two versions: a normal download and a portable one that leaves nothing behind. Pick portable if you want zero footprint on the machine.</p>
         </li>
         <li>
-          <h3>Point it at your game data</h3>
-          <p>Launch the app. On first run it detects your Warcraft installations automatically; if it does not, browse to your game folder so it can find the data. It then indexes those local files, which may take a minute the first time. From here on the app works entirely from your disk, so you can even disconnect from the internet and it keeps working.</p>
+          <h3>Unzip it before you run it</h3>
+          <p>Extract the archive to a folder first. Launching the app while it is still inside the ZIP archive fails, which is why the app checks for that and warns you. Once extracted, run it. There is no installer wizard and no account prompt at any stage.</p>
         </li>
         <li>
-          <h3>Open the 3D world viewer</h3>
-          <p>Inside wow.export, open the 3D map viewer. It renders real terrain, so you are looking at the actual world geometry, textures and objects, not a flat map image. Choose a continent first, then narrow to the zone you want. Older zones from the Classic data set load quickly because there is far less terrain to stream.</p>
+          <h3>Tell it where the game data lives</h3>
+          <p>On launch the app looks for Warcraft installs on your disk and lists what it finds, covering both Classic and Retail. If it misses yours, point it at the game folder by hand. It also reads older legacy installs, not just the current client format. If you have no install on this machine at all, switch on online streaming and it pulls the same files from public CDN hosts instead; that path is still account-free, because it reads public game data, not your account.</p>
+        </li>
+        <li>
+          <h3>Let it build its cache</h3>
+          <p>The first launch indexes the file list, which takes a little while and can look like nothing is happening. Let it finish. Later launches reuse that cache and open almost immediately, and the app offers to update itself when a new version lands.</p>
+        </li>
+        <li>
+          <h3>Open the map viewer and pick a zone</h3>
+          <p>Open the map viewer, choose a continent, then narrow down to the zone you want. The 3D view was built on pre-baked distance textures, so even a full continent renders at sixty frames a second or better while still showing real terrain shape rather than a painted map. Older Classic zones load fastest, because there is less terrain to stream.</p>
+        </li>
+        <li>
+          <h3>Tune the view before you record</h3>
+          <p>Set the level of detail to trade fidelity against frame rate: raise it to inspect terrain up close, drop it for smooth pans across a whole continent. The map viewer can also overlay instance encounter layout if you want dungeon shots, and the model viewer has an orthographic camera mode for flat, map-like framing.</p>
         </li>
       </ol>
+      <p class="lede">Checked against wow.export 0.2.19, its own README and changelog, and coverage from Icy Veins and Master of Warcraft.</p>
     </section>
 
     <section id="roam">
       <h2>Roam the world</h2>
-      <p>Once a zone is loaded you have a free camera: move it with the movement keys while steering with the mouse, exactly like an in-game free-look, and switch between orbiting a point and flying straight through the world. There is no character, no interface, no health bar, no minimap, and no name plates, because none of those exist in the viewer. There is nothing to hide.</p>
+      <p>Once a zone is loaded you have a free camera: move, rotate, and zoom it anywhere over the terrain, with no character to steer and no interface to hide. There is no health bar, no minimap, and no name plates, because none of those exist in the viewer.</p>
       <p>This is the answer to the two problems a live free camera cannot solve. You can put the lens anywhere, including places a character could never stand, and you move the camera directly instead of marching a character around and hoping the shot lines up.</p>
       <table>
         <thead><tr><th>What you want</th><th>How the viewer handles it</th></tr></thead>
@@ -190,7 +204,7 @@ footer p{color:var(--text-3);max-width:70ch}
           <tr><td>Repeatable shots</td><td>Reopen the same zone and re-frame the same view any time</td></tr>
         </tbody>
       </table>
-      <p class="lede">The exact key bindings are shown inside the app and differ slightly between the orbit and fly modes, so check the on-screen help the first time you open a zone.</p>
+      <p class="lede">The exact key bindings live in the app's own on-screen help, so check them the first time you open a zone.</p>
     </section>
 
     <section id="capture">
