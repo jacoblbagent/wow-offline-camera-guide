@@ -125,9 +125,9 @@ footer p{color:var(--text-3);max-width:70ch}
   <nav aria-label="Contents">
     <div class="lbl">On this page</div>
     <ol>
-      <li><a href="#safety">Why this is safe</a></li>
       <li><a href="#needs">What you need</a></li>
       <li><a href="#install">Set it up</a></li>
+      <li><a href="#safety">Why this is safe</a></li>
       <li><a href="#roam">Roam the world</a></li>
       <li><a href="#capture">Record the footage</a></li>
       <li><a href="#blender">Going further: real cinematics</a></li>
@@ -137,16 +137,6 @@ footer p{color:var(--text-3);max-width:70ch}
   </nav>
 
   <main>
-
-    <section id="safety">
-      <h2>Why this cannot touch your account</h2>
-      <p class="lede">Every account ban in Warcraft comes from one place: the anti-cheat system that runs <em>inside</em> the game client while you are connected to Blizzard. It watches the live process for tampering and the network for impossible behaviour. This method never goes near either.</p>
-      <p>The tool reads the game's data files that are already installed on your computer, in the same way a photo viewer reads a photo. It does not launch the game, does not log in, does not open a connection to Blizzard, and never writes to or modifies a single client file. Because the game client is not running, there is nothing for the anti-cheat to observe, and no session to attach a flag to.</p>
-      <div class="note">
-        <h3>The distinction that matters</h3>
-        <p>The free-camera tricks people get banned for are memory patchers. They edit the running game in real time to detach the camera from your character, which is exactly what the anti-cheat is built to catch. This guide does the opposite: it builds a separate viewer that reads the world's data offline. Nothing is injected, nothing is modified, and your character does not exist in that viewer at all.</p>
-      </div>
-    </section>
 
     <section id="needs">
       <h2>What you need</h2>
@@ -189,6 +179,16 @@ footer p{color:var(--text-3);max-width:70ch}
         </li>
       </ol>
       <p class="lede">Checked against wow.export 0.2.19, its own README and changelog, and coverage from Icy Veins and Master of Warcraft.</p>
+    </section>
+
+    <section id="safety">
+      <h2>Why this cannot touch your account</h2>
+      <p class="lede">Every account ban in Warcraft comes from one place: the anti-cheat system that runs <em>inside</em> the game client while you are connected to Blizzard. It watches the live process for tampering and the network for impossible behaviour. This method never goes near either.</p>
+      <p>The tool reads the game's data files that are already installed on your computer, in the same way a photo viewer reads a photo. It does not launch the game, does not log in, does not open a connection to Blizzard, and never writes to or modifies a single client file. Because the game client is not running, there is nothing for the anti-cheat to observe, and no session to attach a flag to.</p>
+      <div class="note">
+        <h3>The distinction that matters</h3>
+        <p>The free-camera tricks people get banned for are memory patchers. They edit the running game in real time to detach the camera from your character, which is exactly what the anti-cheat is built to catch. This guide does the opposite: it builds a separate viewer that reads the world's data offline. Nothing is injected, nothing is modified, and your character does not exist in that viewer at all.</p>
+      </div>
     </section>
 
     <section id="roam">
