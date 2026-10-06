@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Offline Free-Camera Roaming in WoW Classic</title>
+<meta name="description" content="Roam World of Warcraft Classic in a free camera with no UI and no character movement, entirely offline, without touching your game account.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#12100e;
+  --surface:#1b1815;
+  --surface-2:#241f1a;
+  --text:#ece7e0;
+  --text-2:#b6ada2;
+  --text-3:#988f84;
+  --border:#332c25;
+  --border-strong:#463c31;
+  --accent:#e6b45c;
+  --accent-soft:#2c2416;
+  --on-accent:#1c1305;
+  --ok:#6fc494;
+  --warn:#e0a45e;
+  --danger:#ef9086;
+  --chip-bg:#3a332c;
+  --chip-ink:#e2dbd1;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px; --s10:40px;
+  --r-sm:4px; --r-md:8px; --r-lg:12px;
+  --font:'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --mono:ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --t-xs:.75rem; --t-sm:.875rem; --t-base:1rem; --t-lg:1.25rem; --t-xl:1.5625rem; --t-2xl:1.953rem; --t-3xl:2.441rem;
+  color-scheme:dark;
+  font-family:var(--font);
+  font-synthesis-weight:none;
+  -webkit-font-smoothing:antialiased;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-size:var(--t-base);line-height:1.58}
+
+::selection{background:color-mix(in srgb, var(--accent) 30%, transparent);color:var(--text)}
+*{scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;border:3px solid var(--bg)}
+*::-webkit-scrollbar-track{background:transparent}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+button,a,label{ touch-action:manipulation }
+
+.wrap{max-width:1080px;margin:0 auto;padding:var(--s8) var(--s6) 96px;
+  display:grid;grid-template-columns:230px minmax(0,1fr);gap:var(--s10);align-items:start}
+@media (max-width:820px){.wrap{grid-template-columns:1fr;gap:var(--s6);padding:var(--s6) var(--s5) 72px}}
+
+/* masthead */
+.mast{grid-column:1 / -1;border-bottom:1px solid var(--border);padding-bottom:var(--s5)}
+.mast h1{margin:0 0 var(--s3);font-size:var(--t-2xl);line-height:1.15;letter-spacing:-.02em;font-weight:600;max-width:24ch}
+.mast p{margin:0;color:var(--text-2);max-width:62ch;font-size:var(--t-base)}
+.meta{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4)}
+.chip{display:inline-flex;align-items:center;gap:var(--s1);padding:2px var(--s2);border-radius:var(--r-sm);
+  background:var(--chip-bg);color:var(--chip-ink);font-size:var(--t-xs);font-weight:600;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* nav */
+nav{position:sticky;top:var(--s6);font-size:var(--t-sm)}
+nav .lbl{color:var(--text-3);font-weight:600;margin-bottom:var(--s3);font-size:var(--t-xs)}
+nav ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--s2)}
+nav a{color:var(--text-2);text-decoration:none;display:block;padding:2px 0}
+nav a:hover{color:var(--text);opacity:.85}
+@media (max-width:820px){nav{position:static;border-bottom:1px solid var(--border);padding-bottom:var(--s4)}
+  nav ol{flex-direction:row;flex-wrap:wrap;gap:var(--s2) var(--s4)}}
+
+main{min-width:0}
+section{margin:0 0 var(--s10)}
+section:last-child{margin-bottom:0}
+h2{font-size:var(--t-xl);line-height:1.2;letter-spacing:-.015em;font-weight:600;margin:0 0 var(--s4);
+  padding-top:var(--s2);max-width:30ch}
+h3{font-size:var(--t-lg);font-weight:600;margin:var(--s6) 0 var(--s2);letter-spacing:-.01em;max-width:34ch}
+p{margin:0 0 var(--s4);max-width:68ch;color:var(--text)}
+p.lede{color:var(--text-2)}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+a:hover{opacity:.8}
+ul,ol{margin:0 0 var(--s4);padding-left:1.25em;max-width:68ch}
+li{margin:0 0 var(--s2)}
+li:last-child{margin-bottom:0}
+strong{font-weight:600;color:var(--text)}
+code{font-family:var(--mono);font-size:.9em;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:1px 5px;color:#f0d9a8}
+
+/* steps */
+ol.steps{list-style:none;counter-reset:step;padding:0;margin:0;max-width:none}
+ol.steps>li{counter-increment:step;position:relative;padding:0 0 var(--s6) var(--s8);
+  border-left:1px solid var(--border);margin:0}
+ol.steps>li:last-child{border-left-color:transparent;padding-bottom:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:-13px;top:0;width:26px;height:26px;
+  display:grid;place-items:center;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-strong);
+  color:var(--accent);font-size:var(--t-xs);font-weight:700;font-variant-numeric:tabular-nums}
+ol.steps h3{margin:0 0 var(--s2);font-size:var(--t-lg)}
+ol.steps p{margin-bottom:var(--s3)}
+ol.steps p:last-child{margin-bottom:0}
+
+/* callout / panels */
+.note,.panel{background:var(--surface);border-radius:var(--r-lg);padding:var(--s5);margin:0 0 var(--s5)}
+.note{border:1px solid var(--border)}
+.note h3,.panel h3{margin-top:0}
+.note.warn{background:var(--surface-2)}
+
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm);margin:0 0 var(--s5)}
+th,td{text-align:left;padding:var(--s3);border-bottom:1px solid var(--border);vertical-align:top}
+th{color:var(--text-3);font-weight:600;font-size:var(--t-xs)}
+td:first-child{color:var(--text);font-weight:600;white-space:nowrap}
+@media (max-width:640px){table,thead,tbody,tr,td,th{display:block}
+  thead{display:none}td{border:0;padding:2px 0}td:first-child{padding-top:var(--s3)}
+  tr{border-bottom:1px solid var(--border);padding-bottom:var(--s3)}}
+
+footer{grid-column:1 / -1;border-top:1px solid var(--border);margin-top:var(--s8);padding-top:var(--s4);
+  color:var(--text-3);font-size:var(--t-sm)}
+footer p{color:var(--text-3);max-width:70ch}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <h1>Offline free-camera roaming in Warcraft Classic</h1>
+    <p>Fly a free camera anywhere in Azeroth, with no interface and no character to walk around, without ever putting your game account at risk. The whole method works on data already sitting on your disk.</p>
+    <div class="meta">
+      <span class="chip">No account contact</span>
+      <span class="chip">Fully offline</span>
+      <span class="chip">Client files unchanged</span>
+    </div>
+  </header>
+
+  <nav aria-label="Contents">
+    <div class="lbl">On this page</div>
+    <ol>
+      <li><a href="#safety">Why this is safe</a></li>
+      <li><a href="#needs">What you need</a></li>
+      <li><a href="#install">Set it up</a></li>
+      <li><a href="#roam">Roam the world</a></li>
+      <li><a href="#capture">Record the footage</a></li>
+      <li><a href="#blender">Going further: real cinematics</a></li>
+      <li><a href="#alternatives">Other offline tools</a></li>
+      <li><a href="#donts">Rules to keep it safe</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="safety">
+      <h2>Why this cannot touch your account</h2>
+      <p class="lede">Every account ban in Warcraft comes from one place: the anti-cheat system that runs <em>inside</em> the game client while you are connected to Blizzard. It watches the live process for tampering and the network for impossible behaviour. This method never goes near either.</p>
+      <p>The tool reads the game's data files that are already installed on your computer, in the same way a photo viewer reads a photo. It does not launch the game, does not log in, does not open a connection to Blizzard, and never writes to or modifies a single client file. Because the game client is not running, there is nothing for the anti-cheat to observe, and no session to attach a flag to.</p>
+      <div class="note">
+        <h3>The distinction that matters</h3>
+        <p>The free-camera tricks people get banned for are memory patchers. They edit the running game in real time to detach the camera from your character, which is exactly what the anti-cheat is built to catch. This guide does the opposite: it builds a separate viewer that reads the world's data offline. Nothing is injected, nothing is modified, and your character does not exist in that viewer at all.</p>
+      </div>
+    </section>
+
+    <section id="needs">
+      <h2>What you need</h2>
+      <p>All of it free, none of it tied to an account.</p>
+      <ul>
+        <li>A local Warcraft install. Any current Classic client on your disk works, because the viewer reads that install's own data files. The game does not need to be running or even updated to the newest patch.</li>
+        <li><strong>wow.export</strong>, the export toolkit by Kruithne. This is the app that contains the built-in 3D world viewer. It is a portable download, so there is no installer and no sign-in.</li>
+        <li>Roughly 4 GB of free memory for continent-scale views, more if you load several zones at once.</li>
+        <li>Optional: a screen recorder such as OBS Studio if you want moving footage rather than stills.</li>
+      </ul>
+    </section>
+
+    <section id="install">
+      <h2>Set it up</h2>
+      <ol class="steps">
+        <li>
+          <h3>Download the viewer</h3>
+          <p>Get wow.export from its official page at <a href="https://www.kruithne.net/wow.export/">kruithne.net/wow.export</a>, choosing the portable build for Windows or the macOS package. There is a build for each platform, so pick the one matching your machine. Nothing is installed into the game folder and no account is requested at any point.</p>
+        </li>
+        <li>
+          <h3>Point it at your game data</h3>
+          <p>Launch the app. On first run it detects your Warcraft installations automatically; if it does not, browse to your game folder so it can find the data. It then indexes those local files, which may take a minute the first time. From here on the app works entirely from your disk, so you can even disconnect from the internet and it keeps working.</p>
+        </li>
+        <li>
+          <h3>Open the 3D world viewer</h3>
+          <p>Inside wow.export, open the 3D map viewer. It renders real terrain, so you are looking at the actual world geometry, textures and objects, not a flat map image. Choose a continent first, then narrow to the zone you want. Older zones from the Classic data set load quickly because there is far less terrain to stream.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="roam">
+      <h2>Roam the world</h2>
+      <p>Once a zone is loaded you have a free camera: move it with the movement keys while steering with the mouse, exactly like an in-game free-look, and switch between orbiting a point and flying straight through the world. There is no character, no interface, no health bar, no minimap, and no name plates, because none of those exist in the viewer. There is nothing to hide.</p>
+      <p>This is the answer to the two problems a live free camera cannot solve. You can put the lens anywhere, including places a character could never stand, and you move the camera directly instead of marching a character around and hoping the shot lines up.</p>
+      <table>
+        <thead><tr><th>What you want</th><th>How the viewer handles it</th></tr></thead>
+        <tbody>
+          <tr><td>Free movement</td><td>Fly or orbit the camera anywhere in the loaded terrain</td></tr>
+          <tr><td>Clean frame</td><td>No interface exists, so nothing to toggle off</td></tr>
+          <tr><td>Impossible angles</td><td>Camera is not tied to a body, so clipping through walls is a choice, not a problem</td></tr>
+          <tr><td>Repeatable shots</td><td>Reopen the same zone and re-frame the same view any time</td></tr>
+        </tbody>
+      </table>
+      <p class="lede">The exact key bindings are shown inside the app and differ slightly between the orbit and fly modes, so check the on-screen help the first time you open a zone.</p>
+    </section>
+
+    <section id="capture">
+      <h2>Record the footage</h2>
+      <p>Because the viewer is a normal desktop window, anything that records your screen records your flythrough. Set your recorder to capture the viewer window at a high resolution and a steady frame rate, then move the camera slowly and smoothly, slower than feels right, since fast camera pans read as jitter on playback.</p>
+      <p>Push the render quality up in the viewer's own settings first, and if your machine can handle it, run the window larger than your final video and downscale afterwards. That single step does more for how cinematic the result looks than any in-app effect.</p>
+    </section>
+
+    <section id="blender">
+      <h2>Going further: real cinematics</h2>
+      <p>Free roaming is the simplest version of what you want. When you are ready to author camera moves rather than fly them by hand, wow.export ships the same pipeline the machinima community uses: a Blender add-on that imports terrain, models and animations straight from your local game data.</p>
+      <p>With the world in Blender you place a camera and animate its path with keyframes, so a move can be perfectly smooth and repeatable, held at a deliberate speed, and re-rendered at any resolution you like. This is the step where offline editing beats anything the live game can do, because the camera is not a game object at all, it is a curve you drew.</p>
+    </section>
+
+    <section id="alternatives">
+      <h2>Other offline tools</h2>
+      <p>The built-in 3D viewer is the shortest path, but two other offline options exist if your needs differ.</p>
+      <table>
+        <thead><tr><th>Tool</th><th>Good for</th><th>Trade-off</th></tr></thead>
+        <tbody>
+          <tr><td>Noggit</td><td>An offline world editor with its own free camera, aimed at the 3.3.5 data set</td><td>Heavier and older; it is an editor, not a viewer</td></tr>
+          <tr><td>Self-hosted wow.tools</td><td>Browser-based map pages served from your own copy of the files</td><td>More setup; the public site has been retired</td></tr>
+        </tbody>
+      </table>
+      <p>Both keep the same safety property as the main method, because both read local files offline and never involve the live client.</p>
+    </section>
+
+    <section id="donts">
+      <h2>Rules to keep it safe</h2>
+      <div class="note warn">
+        <h3>Do</h3>
+        <ul>
+          <li>Keep everything offline and read-only. Do not modify files inside your game folder.</li>
+          <li>Close the game before you run the viewer, so there is no doubt about what is touching what.</li>
+          <li>Prefer the portable build, which leaves no trace on the game install.</li>
+        </ul>
+      </div>
+      <div class="note warn">
+        <h3>Do not</h3>
+        <ul>
+          <li>Do not run free-camera memory patches or dll injections against a live realm. That is the one thing here that carries real ban risk, and this guide never needs it.</li>
+          <li>Do not expect to roam on a live server. There is no legitimate free camera in the running game; the whole point of going offline is that you do not need one.</li>
+          <li>Do not sign in to anything to use these tools. None of them require it.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Built as a reference for offline Warcraft cinematography. Tool names and capabilities reflect the current wow.export release line; check the official pages for the latest builds and control details.</p>
+  </footer>
+
+</div>
+</body>
+</html>
